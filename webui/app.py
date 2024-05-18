@@ -34,7 +34,7 @@ def index():
 def predict():
     imgData = request.get_data()
     imgstr = re.search(b"base64,(.*)", imgData).group(1)
-    with open("output.png", "wb") as output:
+    with open("images_log/output.png", "wb") as output:
         output.write(base64.b64decode(imgstr))
     img = Image.open("output.png").convert("L")
     img = img.resize((32, 32))
