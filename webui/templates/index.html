@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Persian Digit Recognition</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: #E0E0E0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            /* Ensure items wrap to the next line */
+        }
+
+        .canvas-container {
+            position: relative;
+            margin-right: 20px;
+            margin-top: 10px;
+            /* Adjusted margin top */
+
+        }
+
+        canvas {
+            border: 2px solid #E0E0E0;
+            background-color: #FFFFFF;
+        }
+
+        #title {
+            margin-bottom: 10px;
+        }
+
+        #prediction {
+            visibility: hidden;
+            /* Initially hide prediction */
+            font-size: 72px;
+            font-weight: bold;
+            color: #E0E0E0;
+            /* Changed prediction number color */
+            text-align: center;
+            /* Center the prediction number */
+            font-family: "IranSans";
+            /* Persian font family */
+            margin: 0;
+            /* Reset margin to prevent spacing */
+        }
+
+        #prediction-text {
+            visibility: hidden;
+            /* Initially hide prediction text */
+            text-align: left;
+            /* Align the prediction text to the left */
+            margin-bottom: 12px;
+            /* Add margin between the text and number */
+        }
+
+        a {
+            color: #6dce7a;
+        }
+
+        /* Media query for mobile layout */
+        @media only screen and (max-width: 600px) {
+            .container {
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            .canvas-container {
+                margin-right: 0;
+                margin-bottom: 20px;
+                width: 90vw;
+                /* Take 90% of the viewport width */
+                max-width: 400px;
+                /* Maximum width of 400px */
+                max-height: 400px;
+                /* Maximum height of 400px */
+            }
+
+            #title {
+                display: none;
+                /* Hide the title on mobile */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="canvas-container">
+            <canvas id="canvas" width="400" height="400"></canvas>
+        </div>
+        <div class="title-container">
+            <h1 id="title">Persian Digit Recognition</h1>
+            <p>Draw a Persian digit in the box below. The model will automatically recognize and display the digit
+                after you finish drawing. To start a new drawing, simply begin drawing again in the box. <a
+                    href="https://github.com/aliinreallife/persian-digit-recognition" target="_blank">View on GitHub</a>
+            </p>
+
+            <p id="prediction-text">Prediction:</p>
+            <p id="prediction"></p>
+        </div>
+    </div>
+
+    <script>
+        String.prototype.toPersianDigits = function () {
+            var id = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return this.replace(/[0-9]/g, function (w) {
+                return id[+w]
+            });
+        }
+
+        var canvas = document.querySelector('#canvas');
+        var ctx = canvas.getContext('2d');
+        var isDrawing = false;
+        var timeout = null;
+
+        // Set default white background
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('touchstart', startDrawing);
+
+        function startDrawing(e) {
+            e.preventDefault();
+            clearCanvas();
+            hidePrediction();
+            isDrawing = true;
+            if (e.type === 'mousedown') {
+                canvas.addEventListener('mousemove', draw);
+                canvas.addEventListener('mouseup', stopDrawing);
+            } else if (e.type === 'touchstart') {
+                canvas.addEventListener('touchmove', draw);
+                canvas.addEventListener('touchend', stopDrawing);
+            }
+            var rect = canvas.getBoundingClientRect();
+            var x, y;
+            if (e.type === 'mousedown' || e.type === 'mousemove' || e.type === 'mouseup') {
+                x = e.clientX - rect.left;
+                y = e.clientY - rect.top;
+            } else if (e.type === 'touchstart' || e.type === 'touchmove' || e.type === 'touchend') {
+                x = e.touches[0].clientX - rect.left;
+                y = e.touches[0].clientY - rect.top;
+            }
+            ctx.beginPath();
+            ctx.fillStyle = "#FFFFFF"; // Set background color to white
+            ctx.fillRect(0, 0, canvas.width, canvas.height); // Fill canvas with white background
+            ctx.moveTo(x, y);
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+
+        function draw(e) {
+            if (!isDrawing) return;
+            var rect = canvas.getBoundingClientRect();
+            var x, y;
+            if (e.type === 'mousemove') {
+                x = e.clientX - rect.left;
+                y = e.clientY - rect.top;
+            } else if (e.type === 'touchmove') {
+                x = e.touches[0].clientX - rect.left;
+                y = e.touches[0].clientY - rect.top;
+            }
+            ctx.lineWidth = 10;
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#000000';
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+            startPredictTimer();
+            canvas.removeEventListener('mousemove', draw);
+            canvas.removeEventListener('touchmove', draw);
+            canvas.removeEventListener('mouseup', stopDrawing);
+            canvas.removeEventListener('touchend', stopDrawing);
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function hidePrediction() {
+            $('#prediction-text').css('visibility', 'hidden');
+            $('#prediction').css('visibility', 'hidden');
+        }
+
+        function showPrediction() {
+            $('#prediction-text').css('visibility', 'visible');
+            $('#prediction').css('visibility', 'visible');
+        }
+
+        function startPredictTimer() {
+            timeout = setTimeout(predict, 1000); // 1-second delay
+        }
+
+        function predict() {
+            var dataURL = canvas.toDataURL();
+            $.ajax({
+                type: "POST",
+                url: "/predict/",
+                data: dataURL,
+                success: function (result) {
+                    var persianResult = result.toPersianDigits(); // Convert prediction to Persian digits
+                    $('#prediction').html(persianResult); // Show the prediction number
+                    showPrediction(); // Display the prediction
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
