@@ -10,11 +10,12 @@ import os
 app = Flask(__name__)
 model = load_model("models/PDRM.keras")
 
+
 def saveImage(imgData, predicted_digit):
     imgstr = re.search(b"base64,(.*)", imgData).group(1)
     parent_dir = "images_log/"
-    predicted_dir = parent_dir+str(predicted_digit)
-    
+    predicted_dir = parent_dir + str(predicted_digit)
+
     print(predicted_dir)
     if not os.path.exists(predicted_dir):
         os.makedirs(predicted_dir)
@@ -29,14 +30,13 @@ def index():
     return render_template("index.html")
 
 
-
 @app.route("/predict/", methods=["GET", "POST"])
 def predict():
     imgData = request.get_data()
     imgstr = re.search(b"base64,(.*)", imgData).group(1)
     with open("images_log/output.png", "wb") as output:
         output.write(base64.b64decode(imgstr))
-    img = Image.open("output.png").convert("L")
+    img = Image.open("images_log/output.png").convert("L")
     img = img.resize((32, 32))
     img = np.array(img)
     img = img.reshape(1, 32, 32, 1)
@@ -46,8 +46,6 @@ def predict():
     predicted_digit = np.argmax(prediction)
     saveImage(imgData, predicted_digit)
     return str(predicted_digit), 200
-
-
 
 
 if __name__ == "__main__":
