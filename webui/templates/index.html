@@ -22,22 +22,26 @@
         .container {
             display: flex;
             justify-content: flex-start;
+            align-items: flex-start;
             margin-bottom: 20px;
+            max-width: 800px;
+            width: 100%;
             flex-wrap: wrap;
-            /* Ensure items wrap to the next line */
         }
 
         .canvas-container {
             position: relative;
             margin-right: 20px;
             margin-top: 10px;
-            /* Adjusted margin top */
-
         }
 
         canvas {
             border: 2px solid #E0E0E0;
             background-color: #FFFFFF;
+        }
+
+        .title-container {
+            max-width: 350px;
         }
 
         #title {
@@ -46,55 +50,24 @@
 
         #prediction {
             visibility: hidden;
-            /* Initially hide prediction */
             font-size: 72px;
             font-weight: bold;
             color: #E0E0E0;
-            /* Changed prediction number color */
             text-align: center;
-            /* Center the prediction number */
             font-family: "IranSans";
-            /* Persian font family */
             margin: 0;
-            /* Reset margin to prevent spacing */
         }
 
         #prediction-text {
             visibility: hidden;
-            /* Initially hide prediction text */
             text-align: left;
-            /* Align the prediction text to the left */
             margin-bottom: 12px;
-            /* Add margin between the text and number */
         }
 
         a {
             color: #6dce7a;
         }
 
-        /* Media query for mobile layout */
-        @media only screen and (max-width: 600px) {
-            .container {
-                justify-content: center;
-                flex-direction: column;
-            }
-
-            .canvas-container {
-                margin-right: 0;
-                margin-bottom: 20px;
-                width: 90vw;
-                /* Take 90% of the viewport width */
-                max-width: 400px;
-                /* Maximum width of 400px */
-                max-height: 400px;
-                /* Maximum height of 400px */
-            }
-
-            #title {
-                display: none;
-                /* Hide the title on mobile */
-            }
-        }
     </style>
 </head>
 
@@ -104,7 +77,7 @@
             <canvas id="canvas" width="400" height="400"></canvas>
         </div>
         <div class="title-container">
-            <h1 id="title">Persian Digit Recognition</h1>
+            <h2 id="title">Persian Digit Recognition</h1>
             <p>Draw a Persian digit in the box below. The model will automatically recognize and display the digit
                 after you finish drawing. To start a new drawing, simply begin drawing again in the box. <a
                     href="https://github.com/aliinreallife/persian-digit-recognition" target="_blank">View on GitHub</a>
