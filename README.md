@@ -26,6 +26,12 @@ The data used in this project comes from the `Hoda Dataset`, the dataset is pre-
 The dataset includes a total of `102,352 samples`, each of which consists of a 32x32 pixel grayscale image of a handwritten digit and a label indicating the digit's value (0-9).
 For more information about the dataset, please visit the [Hoda Dataset website](https://farsiocr.ir/%D9%85%D8%AC%D9%85%D9%88%D8%B9%D9%87-%D8%AF%D8%A7%D8%AF%D9%87/%D9%85%D8%AC%D9%85%D9%88%D8%B9%D9%87-%D8%A7%D8%B1%D9%82%D8%A7%D9%85-%D8%AF%D8%B3%D8%AA%D9%86%D9%88%DB%8C%D8%B3-%D9%87%D8%AF%DB%8C/).
 
+### Architecture
+
+![PDRM keras](https://github.com/aliinreallife/persian-digit-recognition/assets/91134550/3d80dddf-5ec7-4008-bbf0-edb67a9b0999)
+
+This CNN model architecture for digit recognition starts with an input layer for 32x32 grayscale images, followed by several convolutional layers that use 3x3 kernels to extract features. MaxPooling layers are included to reduce the spatial dimensions (width and height) of the feature maps, and Dropout layers are used for regularization to prevent overfitting. The final Dense layers perform the classification into 10 digit classes. This architecture effectively balances complexity and performance, ensuring high accuracy in recognizing handwritten digits.
+
 
 ## Evaluation
 
