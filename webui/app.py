@@ -12,11 +12,11 @@ model = load_model("models/PDRM.keras")
 
 
 def saveImage(imgData, predicted_digit):
+    predicted_dir = parent_dir + str(predicted_digit)
     imgstr = re.search(b"base64,(.*)", imgData).group(1)
     parent_dir = "images_log/"
-    predicted_dir = parent_dir + str(predicted_digit)
-
-    print(predicted_dir)
+    if not os.path.exists(parent_dir):
+        os.makedirs(parent_dir)
     if not os.path.exists(predicted_dir):
         os.makedirs(predicted_dir)
     # Generate a unique filename using the current date and time
