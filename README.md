@@ -1,7 +1,5 @@
 ![download](https://github.com/aliinreallife/persian-digit-recognition/assets/91134550/e3bdd009-1b20-43a9-8ae9-5cca97581496)
 
-## Description
-
 This project is a Persian digit recognition model. It uses Convolutional Neural Network (CNN) to recognize handwritten Persian digits. The model is trained on the Hoda dataset, which is a dataset of handwritten Persian digits.
 
 ## Live Demo
