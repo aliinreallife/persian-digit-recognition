@@ -30,7 +30,7 @@ For more information about the dataset, please visit the [Hoda Dataset website](
 
 ![PDRM keras](https://github.com/aliinreallife/persian-digit-recognition/assets/91134550/3d80dddf-5ec7-4008-bbf0-edb67a9b0999)
 
-This CNN model architecture for digit recognition starts with an input layer for 32x32 grayscale images, followed by several convolutional layers that use 3x3 kernels to extract features. MaxPooling layers are included to reduce the spatial dimensions (width and height) of the feature maps, and Dropout layers are used for regularization to prevent overfitting. The final Dense layers perform the classification into 10 digit classes. This architecture effectively balances complexity and performance, ensuring high accuracy in recognizing handwritten digits.
+This CNN model architecture for digit recognition starts with an input layer for 32x32 grayscale images, followed by several convolutional layers that use 3x3 kernels to extract features. MaxPooling layers are included to reduce the spatial dimensions (width and height) of the feature maps, and Dropout layers are used for regularization to prevent overfitting.
 
 
 ## Evaluation
