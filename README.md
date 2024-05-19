@@ -1,6 +1,6 @@
 ![download](https://github.com/aliinreallife/persian-digit-recognition/assets/91134550/e3bdd009-1b20-43a9-8ae9-5cca97581496)
 
-This project is a Persian digit recognition model. It uses Convolutional Neural Network (CNN) to recognize handwritten Persian digits. The model is trained on the Hoda dataset, which is a dataset of handwritten Persian digits.
+This project is a Persian digit recognition model. It uses Convolutional Neural Network (`CNN`) to recognize handwritten Persian digits. The model is trained on the Hoda dataset, which is a dataset of handwritten Persian digits.
 
 ## Live Demo
 
@@ -20,6 +20,13 @@ After training the model, you can use it to recognize Persian digits. The model 
 - OpenCV: For image processing.
 - PIL: For image processing.
 
+### Dataset
+
+The data used in this project comes from the `Hoda Dataset`, the dataset is pre-categorized into training, testing, and evaluation sets.
+The dataset includes a total of `102,352 samples`, each of which consists of a 32x32 pixel grayscale image of a handwritten digit and a label indicating the digit's value (0-9).
+For more information about the dataset, please visit the [Hoda Dataset website](https://farsiocr.ir/%D9%85%D8%AC%D9%85%D9%88%D8%B9%D9%87-%D8%AF%D8%A7%D8%AF%D9%87/%D9%85%D8%AC%D9%85%D9%88%D8%B9%D9%87-%D8%A7%D8%B1%D9%82%D8%A7%D9%85-%D8%AF%D8%B3%D8%AA%D9%86%D9%88%DB%8C%D8%B3-%D9%87%D8%AF%DB%8C/).
+
+
 ## Evaluation
 
 After training the model, we evaluated its performance on a separate test set that the model had not seen during training. This gives us a sense of how well the model generalizes to new data.
@@ -38,9 +45,9 @@ From the confusion matrix, we can see that the model performs well on most class
 
 We also computed the precision, recall, and F1 score for each class. These metrics give us more information about the model's performance.
 
-- Precision is the proportion of true positive predictions (i.e., the number of correctly predicted instances of a class) out of all positive predictions made by the model.
-- Recall is the proportion of true positive predictions out of all actual instances of a class.
-- The F1 score is the harmonic mean of precision and recall, and it gives us a single metric that balances the two.
+- `Precision` is the proportion of true positive predictions (i.e., the number of correctly predicted instances of a class) out of all positive predictions made by the model.
+- `Recall` is the proportion of true positive predictions out of all actual instances of a class.
+- `F1 score` is the harmonic mean of precision and recall, and it gives us a single metric that balances the two.
 
 Here are the precision, recall, and F1 score for our model:
 
@@ -61,4 +68,4 @@ Overall, our model performs well on the task of recognizing Persian digits. Howe
 The module `hoda_dataset_reader` is sourced from [HodaDatasetReader](https://github.com/amir-saniyan/HodaDatasetReader).
 
 ## License
-This project is MIT Licensed.
+This project is `MIT` Licensed.
