@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 from PIL import Image
 import re
 import base64
@@ -12,9 +12,9 @@ model = load_model("models/PDRM.keras")
 
 
 def saveImage(imgData, predicted_digit):
+    parent_dir = "images_log/"
     predicted_dir = parent_dir + str(predicted_digit)
     imgstr = re.search(b"base64,(.*)", imgData).group(1)
-    parent_dir = "images_log/"
     if not os.path.exists(parent_dir):
         os.makedirs(parent_dir)
     if not os.path.exists(predicted_dir):
