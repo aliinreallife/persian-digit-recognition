@@ -4,6 +4,8 @@
 <head>
     <title>Persian Digit Recognition</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=no" />
     <style>
         body {
             background-color: #121212;
@@ -42,10 +44,18 @@
 
         .title-container {
             max-width: 350px;
+            text-align: left;
+
+        }
+
+        p {
+            text-align: left;
         }
 
         #title {
             margin-bottom: 10px;
+            text-align: left;
+
         }
 
         #prediction {
@@ -68,6 +78,51 @@
             color: #6dce7a;
         }
 
+        /* Mobile view */
+        @media (max-width: 767px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .canvas-container {
+                width: 90%;
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            canvas {
+                width: 100%;
+                height: auto;
+            }
+
+            .title-container {
+                max-width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* Desktop view */
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row;
+            }
+
+            .canvas-container {
+                width: auto;
+                margin-right: 20px;
+                margin-bottom: 0;
+            }
+
+            canvas {
+                width: 400px;
+                height: 400px;
+            }
+
+            .title-container {
+                text-align: left;
+            }
+        }
     </style>
 </head>
 
@@ -77,12 +132,11 @@
             <canvas id="canvas" width="400" height="400"></canvas>
         </div>
         <div class="title-container">
-            <h2 id="title">Persian Digit Recognition</h1>
-            <p>Draw a Persian digit in the box below. The model will automatically recognize and display the digit
-                after you finish drawing. To start a new drawing, simply begin drawing again in the box. <a
+            <h2 id="title">Persian Digit Recognition</h2>
+            <p>Draw a Persian digit in the box. The model will automatically recognize and display the digit after
+                you finish drawing. To start a new drawing, simply begin drawing again in the box. <a
                     href="https://github.com/aliinreallife/persian-digit-recognition" target="_blank">View on GitHub</a>
             </p>
-
             <p id="prediction-text">Prediction:</p>
             <p id="prediction"></p>
         </div>
@@ -92,7 +146,7 @@
         String.prototype.toPersianDigits = function () {
             var id = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
             return this.replace(/[0-9]/g, function (w) {
-                return id[+w]
+                return id[+w];
             });
         }
 
@@ -126,8 +180,9 @@
                 x = e.clientX - rect.left;
                 y = e.clientY - rect.top;
             } else if (e.type === 'touchstart' || e.type === 'touchmove' || e.type === 'touchend') {
-                x = e.touches[0].clientX - rect.left;
-                y = e.touches[0].clientY - rect.top;
+                var touch = e.touches[0] || e.changedTouches[0];
+                x = touch.clientX - rect.left * (canvas.width / rect.width);
+                y = touch.clientY - rect.top * (canvas.height / rect.height);
             }
             ctx.beginPath();
             ctx.fillStyle = "#FFFFFF"; // Set background color to white
@@ -139,7 +194,6 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
-
         function draw(e) {
             if (!isDrawing) return;
             var rect = canvas.getBoundingClientRect();
@@ -148,8 +202,9 @@
                 x = e.clientX - rect.left;
                 y = e.clientY - rect.top;
             } else if (e.type === 'touchmove') {
-                x = e.touches[0].clientX - rect.left;
-                y = e.touches[0].clientY - rect.top;
+                var touch = e.touches[0] || e.changedTouches[0];
+                x = touch.clientX - rect.left * (canvas.width / rect.width);
+                y = touch.clientY - rect.top * (canvas.height / rect.height);
             }
             ctx.lineWidth = 10;
             ctx.lineJoin = 'round';
@@ -169,10 +224,6 @@
             canvas.removeEventListener('touchmove', draw);
             canvas.removeEventListener('mouseup', stopDrawing);
             canvas.removeEventListener('touchend', stopDrawing);
-        }
-
-        function clearCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
         function hidePrediction() {
