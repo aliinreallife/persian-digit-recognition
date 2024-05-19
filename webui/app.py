@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from tensorflow.keras.models import load_model
+from tensorflow.keras.models import load_model # type: ignore
 from PIL import Image
 import re
 import base64
