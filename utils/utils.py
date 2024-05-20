@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 
 
+
 def cropped_digit(image: np.ndarray) -> np.ndarray:
     # Find contours in the binary image
     contours, _ = cv2.findContours(
@@ -39,7 +40,10 @@ def make_square(image: np.ndarray) -> np.ndarray:
 
 
 def dump_image(
-    image: np.ndarray, predicted_digit: int, resize_flag: bool = True
+    image: np.ndarray,
+    predicted_digit: int,
+    resize_flag: bool = True,
+    reversed_flag: bool = True,
 ) -> str:
     parent_dir = "images_log/"
     predicted_dir = parent_dir + str(predicted_digit)
@@ -52,6 +56,8 @@ def dump_image(
     full_path = os.path.join(predicted_dir, filename)
     if resize_flag:
         image = cv2.resize(image, (32, 32))
+    if reversed_flag:
+        image = cv2.bitwise_not(image)
     cv2.imwrite(full_path, image)
     return full_path
 
