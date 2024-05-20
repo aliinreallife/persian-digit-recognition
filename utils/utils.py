@@ -52,7 +52,7 @@ def dump_image(
     if not os.path.exists(predicted_dir):
         os.makedirs(predicted_dir)
     # Generate a unique filename using the current date and time
-    filename = datetime.now().strftime("%Y%m%d%H%M%S%f") + ".png"
+    filename = datetime.now().strftime("%Y%m%d%H%M%S%f") + ".jpg"
     full_path = os.path.join(predicted_dir, filename)
     if resize_flag:
         image = cv2.resize(image, (32, 32))
