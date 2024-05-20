@@ -18,8 +18,8 @@ def cropped_digit(image: np.ndarray) -> np.ndarray:
     # Find the bounding box with the largest area
     x, y, w, h = max(bounding_boxes, key=lambda item: item[2] * item[3])
 
-    # Crop the digit from the image along with padding (16 pixels) around it
-    padding = 16
+    # Crop the digit from the image along with padding (4 pixels) around it
+    padding = 4
     cropped = image[
         max(0, y - padding) : min(image.shape[0], y + h + padding),
         max(0, x - padding) : min(image.shape[1], x + w + padding),
