@@ -13,6 +13,7 @@ To train the model, run the train.ipynb Jupyter notebook. This will train the CN
 After training the model, you can use it to recognize Persian digits. The model takes a `32x32` grayscale image of a handwritten digit as input and outputs the recognized digit.
 
 ### Required Libraries
+
 - TensorFlow: For creating and training the Model.
 - Hoda Dataset Reader: For reading the Hoda dataset.
 - Matplotlib: For plotting training progress.
@@ -31,7 +32,6 @@ For more information about the dataset, please visit the [Hoda Dataset website](
 ![PDRM keras](https://github.com/aliinreallife/persian-digit-recognition/assets/91134550/3d80dddf-5ec7-4008-bbf0-edb67a9b0999)
 
 This CNN model architecture for digit recognition starts with an input layer for 32x32 grayscale images, followed by several convolutional layers that use 3x3 kernels to extract features. MaxPooling layers are included to reduce the spatial dimensions (width and height) of the feature maps, and Dropout layers are used for regularization to prevent overfitting.
-
 
 ## Evaluation
 
@@ -74,4 +74,5 @@ Overall, our model performs well on the task of recognizing Persian digits. Howe
 The module `hoda_dataset_reader` is sourced from [HodaDatasetReader](https://github.com/amir-saniyan/HodaDatasetReader).
 
 ## License
+
 This project is `MIT` Licensed.
