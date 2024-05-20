@@ -1,22 +1,15 @@
 import matplotlib.pyplot as plt
-from PIL import Image
-import re
-import base64
 from datetime import datetime
 import os
 import cv2
 import numpy as np
 
 
-def cropped_digit(img: np.ndarray) -> np.ndarray:
-    # Convert the image to grayscale
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    # Threshold the image to get a binary image
-    _, thresh = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY_INV)
-
+def cropped_digit(image: np.ndarray) -> np.ndarray:
     # Find contours in the binary image
-    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contours, _ = cv2.findContours(
+        cv2.bitwise_not(image), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+    )
 
     # Get the bounding box for each contour
     bounding_boxes = [cv2.boundingRect(contour) for contour in contours]
@@ -24,36 +17,51 @@ def cropped_digit(img: np.ndarray) -> np.ndarray:
     # Find the bounding box with the largest area
     x, y, w, h = max(bounding_boxes, key=lambda item: item[2] * item[3])
 
-    # Crop the digit from the image along with 4 pixels around it
-    cropped = img[
-        max(0, y - 4) : min(img.shape[0], y + h + 4),
-        max(0, x - 4) : min(img.shape[1], x + w + 4),
+    # Crop the digit from the image along with padding (16 pixels) around it
+    padding = 16
+    cropped = image[
+        max(0, y - padding) : min(image.shape[0], y + h + padding),
+        max(0, x - padding) : min(image.shape[1], x + w + padding),
     ]
     return cropped
 
 
-def make_square(img: np.ndarray) -> np.ndarray:
+def make_square(image: np.ndarray) -> np.ndarray:
     # Determine the number of pixels to add on each side to make the image square
-    top = bottom = (max(img.shape[0], img.shape[1]) - img.shape[0]) // 2
-    left = right = (max(img.shape[0], img.shape[1]) - img.shape[1]) // 2
+    top = bottom = (max(image.shape[0], image.shape[1]) - image.shape[0]) // 2
+    left = right = (max(image.shape[0], image.shape[1]) - image.shape[1]) // 2
 
     # Add white pixels on each side to make the image square
     squared_image = cv2.copyMakeBorder(
-        img, top, bottom, left, right, cv2.BORDER_CONSTANT, value=[255, 255, 255]
+        image, top, bottom, left, right, cv2.BORDER_CONSTANT, value=[255, 255, 255]
     )
     return squared_image
 
 
-def dump_image(imgData: bytes, predicted_digit: np.int64) -> str:
+def dump_image(
+    image: np.ndarray, predicted_digit: int, resize_flag: bool = True
+) -> str:
     parent_dir = "images_log/"
     predicted_dir = parent_dir + str(predicted_digit)
-    imgstr = re.search(b"base64,(.*)", imgData).group(1)
     if not os.path.exists(parent_dir):
         os.makedirs(parent_dir)
     if not os.path.exists(predicted_dir):
         os.makedirs(predicted_dir)
     # Generate a unique filename using the current date and time
     filename = datetime.now().strftime("%Y%m%d%H%M%S%f") + ".png"
-    with open(os.path.join(predicted_dir, filename), "wb") as output:
-        output.write(base64.b64decode(imgstr))
-    return "Image saved successfully!"
+    full_path = os.path.join(predicted_dir, filename)
+    if resize_flag:
+        image = cv2.resize(image, (32, 32))
+    cv2.imwrite(full_path, image)
+    return full_path
+
+
+def resize_image(image: np.ndarray, width: int = 32, hight: int = 32) -> np.ndarray:
+    return cv2.resize(image, (width, hight))
+
+
+def plot_image(image: np.ndarray, title: str = "image") -> None:
+    plt.imshow(image, cmap="gray")
+    plt.title(title)
+    plt.axis("off")
+    plt.show()
