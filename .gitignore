@@ -161,3 +161,6 @@ cython_debug/
 
 # images log
 images_log/
+
+# ngrock run
+run-webui-ngrock.sh
