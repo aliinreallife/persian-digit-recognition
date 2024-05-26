@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import re
 import base64
 from recognizer import recgonize
+import os
 
 app = Flask(__name__)
 
@@ -15,6 +16,8 @@ def index():
 def predict():
     imgData = request.get_data()
     imgstr = re.search(b"base64,(.*)", imgData).group(1)
+    if not os.path.exists("images_log"):
+        os.makedirs("images_log")
     with open("images_log/input.png", "wb") as output:
         output.write(base64.b64decode(imgstr))
     predicted_digit = recgonize("images_log/input.png")
