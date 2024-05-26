@@ -6,7 +6,8 @@ import numpy as np
 
 model = load_model("models/PDRM.keras")
 
-def recgonize(image_path: str) -> int:
+
+def recgonize(image_path: str, dump: bool = True) -> int:
     """
     This function uses a pre-trained model ("PDRM.keras") to recgonize the digit present in the image.
     The input image is preprocessed and then passed to the model for recgonition.
@@ -29,5 +30,6 @@ def recgonize(image_path: str) -> int:
     image = image / 255.0
     prediction = model.predict([image])[0]
     predicted_digit = int(np.argmax(prediction))
-    dump_image(squared_image, predicted_digit)
+    if dump:
+        dump_image(squared_image, predicted_digit)
     return predicted_digit
