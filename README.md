@@ -21,6 +21,9 @@ After training the model, you can use it to recognize Persian digits. The model 
 - OpenCV: For image processing.
 - PIL: For image processing.
 
+> [!note]
+> For OpenCV to function correctly, you need to have `libGL.so.1` installed on your system. This library is part of the OpenGL Utility Library and is required for rendering images.
+
 ### Dataset
 
 The data used in this project comes from the `Hoda Dataset`, the dataset is pre-categorized into training, testing, and evaluation sets.
