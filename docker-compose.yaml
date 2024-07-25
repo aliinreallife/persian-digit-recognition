@@ -1,24 +1,25 @@
-version: '3.8'
+version: "3.8"
 
 services:
   web_ui:
+    container_name: persian-digit-recognition_web_ui
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
-    environment:
-      - FLASK_ENV=development
+
   ngrok:
-      image: ngrok/ngrok:latest
-      restart: unless-stopped
-      env_file:
-        - .env
-      environment:
-        - NGROK_DOMAIN=${NGROK_DOMAIN}
-      command:
-        - "http"
-        - "--domain=${NGROK_DOMAIN}"
-        - "web_ui:5000"
-      ports:
-        - 4040:4040
+    container_name: persian-digit-recognition_ngrok
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - NGROK_DOMAIN=${NGROK_DOMAIN}
+    command:
+      - "http"
+      - "--domain=${NGROK_DOMAIN}"
+      - "web_ui:5000"
+    ports:
+      - 4040:4040
