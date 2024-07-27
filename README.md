@@ -4,7 +4,7 @@ This project is a Persian digit recognition model. It uses Convolutional Neural 
 
 ## Live Demo
 
-You can access a live demo of the model at [this link](https://welcome-unlikely-minnow.ngrok-free.app/).
+You can access a live demo of the model at [this link](https://digit.liara.run).
 
 ## Usage
 
