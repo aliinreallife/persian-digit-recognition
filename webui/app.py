@@ -16,11 +16,11 @@ def index():
 def predict():
     imgData = request.get_data()
     imgstr = re.search(b"base64,(.*)", imgData).group(1)
-    if not os.path.exists("images_log"):
-        os.makedirs("images_log")
-    with open("images_log/input.png", "wb") as output:
+    if not os.path.exists("drawn_digits"):
+        os.makedirs("drawn_digits")
+    with open("drawn_digits/input.png", "wb") as output:
         output.write(base64.b64decode(imgstr))
-    predicted_digit = recgonize("images_log/input.png")
+    predicted_digit = recgonize("drawn_digits/input.png")
     return str(predicted_digit), 200
 
 

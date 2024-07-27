@@ -161,6 +161,7 @@ cython_debug/
 
 # images log
 images_log/
+drawn_digits/
 
 # ngrock run
 run-webui-ngrock.sh

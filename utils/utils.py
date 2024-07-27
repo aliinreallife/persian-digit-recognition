@@ -45,7 +45,7 @@ def dump_image(
     resize_flag: bool = True,
     reversed_flag: bool = True,
 ) -> str:
-    parent_dir = "images_log/"
+    parent_dir = "drawn_digits/"
     predicted_dir = parent_dir + str(predicted_digit)
     if not os.path.exists(parent_dir):
         os.makedirs(parent_dir)
