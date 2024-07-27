@@ -14,9 +14,9 @@ COPY . .
 RUN mkdir -p /usr/src/app/drawn_digits
 VOLUME /usr/src/app/drawn_digits
 
-EXPOSE 5000
+EXPOSE 8000
 
 ENV FLASK_APP=webui/app.py
 ENV PYTHONPATH=/usr/src/app
 
-CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=8000"]
