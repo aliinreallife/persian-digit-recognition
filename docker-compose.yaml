@@ -3,7 +3,7 @@ services:
     container_name: persian-digit-recognition_web_ui
     image: aliinreallife/persian-digit-recognition:latest
     ports:
-      - "5000:5000"
+      - "8000:8000"
   ngrok:
     container_name: persian-digit-recognition_ngrok
     image: ngrok/ngrok:latest
@@ -12,6 +12,6 @@ services:
       - .env
     environment:
       - NGROK_DOMAIN=${NGROK_DOMAIN}
-    command: ["http", "--domain=${NGROK_DOMAIN}", "web_ui:5000"]
+    command: ["http", "--domain=${NGROK_DOMAIN}", "web_ui:8000"]
     ports:
       - 4040:4040
