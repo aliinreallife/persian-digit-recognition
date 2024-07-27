@@ -11,6 +11,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+RUN mkdir -p /usr/src/app/drawn_digits
+VOLUME /usr/src/app/drawn_digits
+
 EXPOSE 5000
 
 ENV FLASK_APP=webui/app.py
