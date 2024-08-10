@@ -4,7 +4,10 @@ This project is a Persian digit recognition model. It uses Convolutional Neural 
 
 ## Live Demo
 
-You can access a live demo of the model at [this link](https://digit.liara.run).
+You can access a live demo of the model at [this link](https://aliinreallife.github.io/persian-digit-recognition/).
+
+>[!warning]
+>The first run may take around 10 seconds due to Docker container startup time. Subsequent runs will be faster.
 
 ## Usage
 
