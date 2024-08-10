@@ -1,256 +1,43 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>Persian Digit Recognition</title>
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <style>
-        body {
-            background-color: #121212;
-            color: #E0E0E0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
+  </head>
 
-        .container {
-            display: flex;
-            justify-content: flex-start;
-            align-items: flex-start;
-            margin-bottom: 20px;
-            max-width: 800px;
-            width: 100%;
-            flex-wrap: wrap;
-        }
-
-        .canvas-container {
-            position: relative;
-            margin-right: 20px;
-            margin-top: 10px;
-        }
-
-        canvas {
-            border: 2px solid #E0E0E0;
-            background-color: #FFFFFF;
-        }
-
-        .title-container {
-            max-width: 350px;
-            text-align: left;
-        }
-
-        p {
-            text-align: left;
-        }
-
-        #title {
-            margin-bottom: 10px;
-            text-align: left;
-        }
-
-        #prediction {
-            visibility: hidden;
-            font-size: 72px;
-            font-weight: bold;
-            color: #E0E0E0;
-            text-align: center;
-            font-family: "IranSans";
-            margin: 0;
-        }
-
-        #prediction-text {
-            visibility: hidden;
-            text-align: left;
-            margin-bottom: 12px;
-        }
-
-        a {
-            color: #6dce7a;
-        }
-
-        /* Mobile view */
-        @media (max-width: 767px) {
-            .container {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .canvas-container {
-                width: 90%;
-                margin-right: 0;
-                margin-bottom: 20px;
-            }
-
-            canvas {
-                width: 100%;
-                height: auto;
-            }
-
-            .title-container {
-                max-width: 100%;
-                text-align: center;
-            }
-        }
-
-        /* Desktop view */
-        @media (min-width: 768px) {
-            .container {
-                flex-direction: row;
-            }
-
-            .canvas-container {
-                width: auto;
-                margin-right: 20px;
-                margin-bottom: 0;
-            }
-
-            canvas {
-                width: 400px;
-                height: 400px;
-            }
-
-            .title-container {
-                text-align: left;
-            }
-        }
-    </style>
-</head>
-
-<body>
+  <body>
     <div class="container">
-        <div class="canvas-container">
-            <canvas id="canvas" width="400" height="400"></canvas>
-        </div>
-        <div class="title-container">
-            <h2 id="title">Persian Digit Recognition</h2>
-            <p>Draw a Persian digit in the box. The model will automatically recognize and display the digit after
-                you finish drawing. To start a new drawing, simply begin drawing again in the box. <a
-                    href="https://github.com/aliinreallife/persian-digit-recognition" target="_blank">View on GitHub</a>
-            </p>
-            <p id="prediction-text">Prediction:</p>
-            <p id="prediction"></p>
-        </div>
+      <div class="canvas-container">
+        <canvas id="canvas" width="400" height="400"></canvas>
+      </div>
+      <div class="title-container">
+        <h2 id="title">Persian Digit Recognition</h2>
+        <p>
+          Draw a Persian digit in the box. The model will automatically
+          recognize and display the digit after you finish drawing. To start a
+          new drawing, simply begin drawing again in the box.
+          <a
+            href="https://github.com/aliinreallife/persian-digit-recognition"
+            target="_blank"
+            >View on GitHub</a
+          >
+        </p>
+        <p id="prediction-text">Prediction:</p>
+        <p id="prediction"></p>
+      </div>
     </div>
 
     <script>
-        String.prototype.toPersianDigits = function () {
-            var id = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-            return this.replace(/[0-9]/g, function (w) {
-                return id[+w];
-            });
-        }
-
-        var canvas = document.querySelector('#canvas');
-        var ctx = canvas.getContext('2d');
-        var isDrawing = false;
-        var timeout = null;
-
-        // Set default white background
-        ctx.fillStyle = "white";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('touchstart', startDrawing);
-
-        function startDrawing(e) {
-            e.preventDefault();
-            clearCanvas();
-            hidePrediction();
-            isDrawing = true;
-            if (e.type === 'mousedown') {
-                canvas.addEventListener('mousemove', draw);
-                canvas.addEventListener('mouseup', stopDrawing);
-            } else if (e.type === 'touchstart') {
-                canvas.addEventListener('touchmove', draw);
-                canvas.addEventListener('touchend', stopDrawing);
-            }
-            var rect = canvas.getBoundingClientRect();
-            var x, y;
-            if (e.type === 'mousedown' || e.type === 'mousemove' || e.type === 'mouseup') {
-                x = e.clientX - rect.left;
-                y = e.clientY - rect.top;
-            } else if (e.type === 'touchstart' || e.type === 'touchmove' || e.type === 'touchend') {
-                var touch = e.touches[0] || e.changedTouches[0];
-                x = touch.clientX - rect.left * (canvas.width / rect.width);
-                y = touch.clientY - rect.top * (canvas.height / rect.height);
-            }
-            ctx.beginPath();
-            ctx.fillStyle = "#FFFFFF"; // Set background color to white
-            ctx.fillRect(0, 0, canvas.width, canvas.height); // Fill canvas with white background
-            ctx.moveTo(x, y);
-        }
-
-        function clearCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-
-        function draw(e) {
-            if (!isDrawing) return;
-            var rect = canvas.getBoundingClientRect();
-            var x, y;
-            if (e.type === 'mousemove') {
-                x = e.clientX - rect.left;
-                y = e.clientY - rect.top;
-            } else if (e.type === 'touchmove') {
-                var touch = e.touches[0] || e.changedTouches[0];
-                x = touch.clientX - rect.left * (canvas.width / rect.width);
-                y = touch.clientY - rect.top * (canvas.height / rect.height);
-            }
-            ctx.lineWidth = 10;
-            ctx.lineJoin = 'round';
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = '#000000';
-            ctx.lineTo(x, y);
-            ctx.stroke();
-        }
-
-        function stopDrawing() {
-            isDrawing = false;
-            if (timeout) {
-                clearTimeout(timeout);
-            }
-            startPredictTimer();
-            canvas.removeEventListener('mousemove', draw);
-            canvas.removeEventListener('touchmove', draw);
-            canvas.removeEventListener('mouseup', stopDrawing);
-            canvas.removeEventListener('touchend', stopDrawing);
-        }
-
-        function hidePrediction() {
-            $('#prediction-text').css('visibility', 'hidden');
-            $('#prediction').css('visibility', 'hidden');
-        }
-
-        function showPrediction() {
-            $('#prediction-text').css('visibility', 'visible');
-            $('#prediction').css('visibility', 'visible');
-        }
-
-        function startPredictTimer() {
-            timeout = setTimeout(predict, 1000); // 1-second delay
-        }
-
-        function predict() {
-            var dataURL = canvas.toDataURL();
-            $.ajax({
-                type: "POST",
-                url: "https://digitz-hta5bnf4gyebg2a6.uaenorth-01.azurewebsites.net/predict/",
-                data: dataURL,
-                success: function (result) {
-                    var persianResult = result.toPersianDigits(); // Convert prediction to Persian digits
-                    $('#prediction').html(persianResult); // Show the prediction number
-                    showPrediction(); // Display the prediction
-                }
-            });
-        }
+      String.prototype.toPersianDigits = function () {
+        var id = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+        return this.replace(/[0-9]/g, function (w) {
+          return id[+w];
+        });
+      };
     </script>
-</body>
 
+    <script src="scripts.js" defer></script>
+  </body>
 </html>
