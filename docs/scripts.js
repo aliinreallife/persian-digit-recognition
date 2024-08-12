@@ -107,7 +107,7 @@ function predict() {
   var dataURL = canvas.toDataURL();
   $.ajax({
     type: "POST",
-    url: "https://digitz-hta5bnf4gyebg2a6.uaenorth-01.azurewebsites.net/predict/",
+    url: "https://digitz.azurewebsites.net/predict/",
     data: dataURL,
     success: function (result) {
       console.log("Result:", result); // Log the result for debugging
